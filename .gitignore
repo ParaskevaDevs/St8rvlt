@@ -15,9 +15,9 @@
 
 # next.js
 /.next/
-# NOTE: /out/ is committed on purpose — Hostinger's Express preset does not
-# run a build step, so the pre-built static export must live in the repo.
-# /out/
+# Static export — regenerated on deploy by the `prestart` build step
+# (next build) before server.js serves it, so it is no longer committed.
+/out/
 
 # production
 /build
