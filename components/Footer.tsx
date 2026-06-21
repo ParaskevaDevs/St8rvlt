@@ -147,7 +147,7 @@ export default function Footer() {
             style={{ fontSize: '10px', letterSpacing: '0.14em' }}
           >
             <span>© 2026 STARVLT (ST8R). ALL RIGHTS RESERVED.</span>
-            <span>CYPRUS STREETWEAR — EST. 2024 — DEMO SITE ★ LIVE</span>
+            <span>CYPRUS STREETWEAR — EST. 2024 — DEMO SITE</span>
           </div>
         </div>
       </div>
