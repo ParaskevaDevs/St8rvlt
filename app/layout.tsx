@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
-import { Archivo_Black, DM_Serif_Display, Space_Grotesk } from "next/font/google";
+import { Archivo_Black, DM_Serif_Display, Space_Grotesk, DM_Mono } from "next/font/google";
 import SmoothScroll from "@/components/SmoothScroll";
 import { CartProvider } from "@/components/cart-context";
-import Nav from "@/components/Nav";
+import DropNav from "@/components/DropNav";
 import CartDrawer from "@/components/CartDrawer";
 import Grain from "@/components/Grain";
 import CustomCursor from "@/components/CustomCursor";
@@ -26,6 +26,13 @@ const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
 });
 
+// Mono / terminal numerals for the kicker + countdown labels.
+const dmMono = DM_Mono({
+  variable: "--font-mono",
+  subsets: ["latin"],
+  weight: ["400", "500"],
+});
+
 export const metadata: Metadata = {
   title: "STARVLT — ST8R",
   description: "ST8R streetwear. Order yours.",
@@ -39,12 +46,12 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`lenis ${archivoBlack.variable} ${dmSerif.variable} ${spaceGrotesk.variable} h-full antialiased`}
+      className={`lenis ${archivoBlack.variable} ${dmSerif.variable} ${spaceGrotesk.variable} ${dmMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
         <CartProvider>
           <SmoothScroll>
-            <Nav />
+            <DropNav />
             <main>{children}</main>
             <CartDrawer />
           </SmoothScroll>

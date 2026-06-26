@@ -16,6 +16,9 @@ export default function SmoothScroll({
     const lenis = new Lenis({
       duration: 1.1,
       smoothWheel: true,
+      // Route touch through Lenis too, so section snapping (lenis.scrollTo)
+      // works on phones. Touch-only — desktop (wheel) behaviour is unchanged.
+      syncTouch: true,
     })
 
     const raf = (time: number) => {

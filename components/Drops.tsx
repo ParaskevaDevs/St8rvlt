@@ -42,8 +42,8 @@ export default function Drops() {
         scrollTrigger: { trigger: '.drops-heading', start: 'top 85%' },
       })
 
-      // horizontal scroll only on desktop
       ScrollTrigger.matchMedia({
+        // DESKTOP — pinned horizontal scrub (unchanged).
         '(min-width: 768px)': () => {
           if (reduce || !track.current || !root.current) return
           const scrollAmount = () =>
@@ -62,6 +62,22 @@ export default function Drops() {
             },
           })
         },
+
+        // MOBILE — no pin/translate; cards are a vertical 2-up grid that
+        // reveals with a simple staggered fade/slide-up as it scrolls in.
+        '(max-width: 767px)': () => {
+          if (reduce) return
+          gsap.utils.toArray<HTMLElement>('.drop-card').forEach((card, i) => {
+            gsap.from(card, {
+              autoAlpha: 0,
+              y: 28,
+              duration: 0.7,
+              ease: 'power3.out',
+              delay: (i % 2) * 0.08, // gentle intra-row stagger
+              scrollTrigger: { trigger: card, start: 'top 88%', once: true },
+            })
+          })
+        },
       })
     }, root)
 
@@ -75,7 +91,7 @@ export default function Drops() {
       aria-label="The drop"
       className="relative overflow-hidden bg-black py-24 md:py-0"
     >
-      <div className="md:flex md:h-screen md:flex-col md:justify-center">
+      <div className="md:flex md:min-h-screen md:flex-col md:justify-center md:py-8">
         <div className="container-1400 px-6 md:px-12">
           <p
             className="mb-3 font-grotesk text-grey"
@@ -93,13 +109,13 @@ export default function Drops() {
 
         <div
           ref={track}
-          className="flex flex-col gap-6 px-6 md:w-max md:flex-row md:gap-8 md:px-12"
+          className="grid grid-cols-2 gap-x-4 gap-y-9 px-6 md:flex md:w-max md:flex-row md:gap-8 md:px-12"
         >
           {PRODUCTS.map((p) => (
             <article
               key={p.id}
               data-cursor="hover"
-              className="group w-full shrink-0 md:w-[340px] lg:w-[380px]"
+              className="drop-card group w-full shrink-0 md:w-[340px] lg:w-[380px]"
             >
               <div className="relative aspect-[4/5] w-full overflow-hidden border border-white/10 bg-[#0e0e0e] transition-colors duration-300 group-hover:border-red">
                 {p.image ? (
@@ -125,7 +141,7 @@ export default function Drops() {
                 </span>
               </div>
 
-              <div className="mt-4 flex items-center justify-between">
+              <div className="mt-4 flex flex-col items-start gap-2 md:flex-row md:items-center md:justify-between md:gap-0">
                 <h3
                   className="font-grotesk text-paper"
                   style={{ fontSize: '13px', letterSpacing: '0.1em' }}
@@ -135,7 +151,7 @@ export default function Drops() {
                 <button
                   type="button"
                   onClick={() => addItem({ id: p.id, name: p.name, price: p.price })}
-                  className="border border-red px-4 py-2 font-grotesk text-red transition-colors duration-300 hover:bg-red hover:text-black"
+                  className="border border-red px-4 py-2 font-grotesk text-red transition-colors duration-300 hover:bg-red hover:text-black max-md:w-full"
                   style={{ fontSize: '10px', letterSpacing: '0.16em' }}
                 >
                   ADD TO CART

@@ -21,6 +21,7 @@
   --font-archivo: var(--font-archivo);
   --font-serif: var(--font-serif);
   --font-grotesk: var(--font-grotesk);
+  --font-mono: var(--font-mono);
 }
 
 * {
@@ -104,5 +105,17 @@ body {
 @media (prefers-reduced-motion: reduce) {
   .marquee-track {
     animation: none;
+  }
+}
+
+/* ----------------------------------------------------------------------
+   Mobile-only refinements (< md / 768px). Desktop is untouched: these
+   rules never apply at >=768px. The !important here overrides the inline
+   `gap` on the countdown so the 2x2 phone grid gets comfortable breathing
+   room between rows without affecting the desktop single-row flex layout.
+   ---------------------------------------------------------------------- */
+@media (max-width: 767px) {
+  #dg-countdown {
+    gap: clamp(20px, 5vw, 30px) clamp(14px, 6vw, 26px) !important;
   }
 }
