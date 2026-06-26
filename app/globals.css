@@ -118,4 +118,14 @@ body {
   #dg-countdown {
     gap: clamp(20px, 5vw, 30px) clamp(14px, 6vw, 26px) !important;
   }
+
+  /* Footer fits one phone screen: scale the giant ST8R down so it clears the
+     fixed nav, and tighten the ABOUT blurb. (Override the inline font sizes.) */
+  .foot-wordmark h2 {
+    font-size: clamp(54px, 16vw, 78px) !important;
+  }
+  .foot-blurb {
+    font-size: 13px !important;
+    line-height: 1.5 !important;
+  }
 }

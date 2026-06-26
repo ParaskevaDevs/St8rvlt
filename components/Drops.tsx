@@ -32,8 +32,13 @@ export default function Drops() {
   useEffect(() => {
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
+    // The mobile address bar shows/hides constantly, firing height-only
+    // resizes. Ignore those so the pinned carousel never jumps mid-scroll;
+    // genuine width/orientation changes still recompute via the handlers below.
+    ScrollTrigger.config({ ignoreMobileResize: true })
+
     const ctx = gsap.context(() => {
-      // heading reveal
+      // heading reveal (all viewports)
       gsap.from('.drops-heading', {
         yPercent: reduce ? 0 : 120,
         opacity: reduce ? 1 : 0,
@@ -42,46 +47,49 @@ export default function Drops() {
         scrollTrigger: { trigger: '.drops-heading', start: 'top 85%' },
       })
 
-      ScrollTrigger.matchMedia({
-        // DESKTOP — pinned horizontal scrub (unchanged).
-        '(min-width: 768px)': () => {
-          if (reduce || !track.current || !root.current) return
-          const scrollAmount = () =>
-            track.current!.scrollWidth - window.innerWidth
+      // Pinned horizontal scroll-telling — ONE code path for mobile + desktop.
+      // The section pins and the product row scrubs sideways as you scroll.
+      // The only difference is card width (CSS): ~80vw on phones, fixed px on
+      // desktop. Distance is computed from the element so it survives resizes.
+      if (reduce || !track.current || !root.current) return
 
-          gsap.to(track.current, {
-            x: () => -scrollAmount(),
-            ease: 'none',
-            scrollTrigger: {
-              trigger: root.current,
-              start: 'top top',
-              end: () => '+=' + scrollAmount(),
-              pin: true,
-              scrub: 0.6,
-              invalidateOnRefresh: true,
-            },
-          })
-        },
+      const distance = () => track.current!.scrollWidth - window.innerWidth
 
-        // MOBILE — no pin/translate; cards are a vertical 2-up grid that
-        // reveals with a simple staggered fade/slide-up as it scrolls in.
-        '(max-width: 767px)': () => {
-          if (reduce) return
-          gsap.utils.toArray<HTMLElement>('.drop-card').forEach((card, i) => {
-            gsap.from(card, {
-              autoAlpha: 0,
-              y: 28,
-              duration: 0.7,
-              ease: 'power3.out',
-              delay: (i % 2) * 0.08, // gentle intra-row stagger
-              scrollTrigger: { trigger: card, start: 'top 88%', once: true },
-            })
-          })
+      gsap.to(track.current, {
+        x: () => -distance(),
+        ease: 'none',
+        scrollTrigger: {
+          trigger: root.current,
+          start: 'top top',
+          end: () => '+=' + distance(),
+          pin: true,
+          scrub: 0.6,
+          invalidateOnRefresh: true,
         },
       })
     }, root)
 
-    return () => ctx.revert()
+    // Recompute only on real width / orientation changes (not the address-bar
+    // height wobble), so the pin stays stable on touch.
+    let lastW = window.innerWidth
+    const onResize = () => {
+      if (window.innerWidth !== lastW) {
+        lastW = window.innerWidth
+        ScrollTrigger.refresh()
+      }
+    }
+    const onOrient = () => {
+      lastW = window.innerWidth
+      ScrollTrigger.refresh()
+    }
+    window.addEventListener('resize', onResize)
+    window.addEventListener('orientationchange', onOrient)
+
+    return () => {
+      window.removeEventListener('resize', onResize)
+      window.removeEventListener('orientationchange', onOrient)
+      ctx.revert()
+    }
   }, [])
 
   return (
@@ -89,9 +97,9 @@ export default function Drops() {
       ref={root}
       id="shop"
       aria-label="The drop"
-      className="relative overflow-hidden bg-black py-24 md:py-0"
+      className="relative overflow-hidden bg-black"
     >
-      <div className="md:flex md:min-h-screen md:flex-col md:justify-center md:py-8">
+      <div className="flex min-h-[100svh] flex-col justify-center py-8 md:min-h-screen">
         <div className="container-1400 px-6 md:px-12">
           <p
             className="mb-3 font-grotesk text-grey"
@@ -109,13 +117,13 @@ export default function Drops() {
 
         <div
           ref={track}
-          className="grid grid-cols-2 gap-x-4 gap-y-9 px-6 md:flex md:w-max md:flex-row md:gap-8 md:px-12"
+          className="flex w-max flex-row gap-4 px-6 md:gap-8 md:px-12"
         >
           {PRODUCTS.map((p) => (
             <article
               key={p.id}
               data-cursor="hover"
-              className="drop-card group w-full shrink-0 md:w-[340px] lg:w-[380px]"
+              className="group w-[80vw] shrink-0 md:w-[340px] lg:w-[380px]"
             >
               <div className="relative aspect-[4/5] w-full overflow-hidden border border-white/10 bg-[#0e0e0e] transition-colors duration-300 group-hover:border-red">
                 {p.image ? (
@@ -141,7 +149,7 @@ export default function Drops() {
                 </span>
               </div>
 
-              <div className="mt-4 flex flex-col items-start gap-2 md:flex-row md:items-center md:justify-between md:gap-0">
+              <div className="mt-4 flex items-center justify-between">
                 <h3
                   className="font-grotesk text-paper"
                   style={{ fontSize: '13px', letterSpacing: '0.1em' }}
@@ -151,7 +159,7 @@ export default function Drops() {
                 <button
                   type="button"
                   onClick={() => addItem({ id: p.id, name: p.name, price: p.price })}
-                  className="border border-red px-4 py-2 font-grotesk text-red transition-colors duration-300 hover:bg-red hover:text-black max-md:w-full"
+                  className="border border-red px-4 py-2 font-grotesk text-red transition-colors duration-300 hover:bg-red hover:text-black"
                   style={{ fontSize: '10px', letterSpacing: '0.16em' }}
                 >
                   ADD TO CART

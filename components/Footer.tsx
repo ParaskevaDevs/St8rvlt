@@ -103,10 +103,10 @@ export default function Footer() {
     <footer
       ref={root}
       aria-label="Site footer"
-      className="relative z-10 overflow-hidden bg-black"
+      className="relative z-10 overflow-hidden bg-black max-md:flex max-md:h-[100svh] max-md:flex-col"
     >
       {/* 1 — MARQUEE STRIP */}
-      <div className="foot-marquee overflow-hidden bg-red" aria-hidden="true">
+      <div className="foot-marquee overflow-hidden bg-red max-md:shrink-0" aria-hidden="true">
         <div className="marquee-track py-2.5">
           {Array.from({ length: 2 }).map((_, i) => (
             <span
@@ -120,7 +120,7 @@ export default function Footer() {
         </div>
       </div>
 
-      <div className="container-1400 px-6 py-20 md:px-12 md:py-28">
+      <div className="container-1400 px-6 py-20 md:px-12 md:py-28 max-md:flex max-md:min-h-0 max-md:flex-1 max-md:flex-col max-md:justify-center max-md:gap-7 max-md:py-0 max-md:pt-16">
         {/* 2 — BIG WORDMARK */}
         <div className="foot-wordmark relative inline-block" style={{ willChange: 'transform' }}>
           <h2
@@ -138,17 +138,17 @@ export default function Footer() {
         </div>
 
         {/* 3 — ABOUT / SOCIALS band */}
-        <div className="mt-14 grid grid-cols-1 gap-12 md:mt-20 md:grid-cols-2 md:gap-10">
+        <div className="mt-14 grid grid-cols-1 gap-12 md:mt-20 md:grid-cols-2 md:gap-10 max-md:mt-0 max-md:gap-5">
           {/* LEFT — ABOUT */}
           <div className="foot-col">
             <p
-              className="mb-5 font-mono text-grey"
+              className="mb-5 font-mono text-grey max-md:mb-2"
               style={{ fontSize: '11px', letterSpacing: '0.28em' }}
             >
               ABOUT
             </p>
             <p
-              className="font-grotesk text-paper"
+              className="foot-blurb font-grotesk text-paper"
               style={{ fontSize: '15px', lineHeight: 1.65, maxWidth: '46ch' }}
             >
               ST8R is a Cyprus streetwear label built on limited drops. No restocks,
@@ -160,12 +160,12 @@ export default function Footer() {
           {/* RIGHT — SOCIALS / STOCKISTS */}
           <div className="foot-col md:justify-self-end">
             <p
-              className="mb-5 font-mono text-grey"
+              className="mb-5 font-mono text-grey max-md:mb-2"
               style={{ fontSize: '11px', letterSpacing: '0.28em' }}
             >
               SOCIALS / STOCKISTS
             </p>
-            <ul className="flex flex-col gap-3.5">
+            <ul className="flex flex-col gap-3.5 max-md:gap-2.5">
               {SOCIALS.map((s) =>
                 s.href ? (
                   <li key={s.label}>
@@ -209,9 +209,9 @@ export default function Footer() {
       </div>
 
       {/* 4 — LEGAL / LICENSE ROW */}
-      <div className="foot-legal border-t border-paper/10">
+      <div className="foot-legal border-t border-paper/10 max-md:shrink-0">
         <div
-          className="container-1400 flex flex-col gap-3 px-6 py-6 font-mono text-grey md:flex-row md:items-center md:justify-between md:px-12"
+          className="container-1400 flex flex-col gap-3 px-6 py-6 font-mono text-grey md:flex-row md:items-center md:justify-between md:px-12 max-md:gap-1 max-md:py-4"
           style={{ fontSize: '11px', letterSpacing: '0.1em' }}
         >
           <span>© 2026 STARVLT (ST8R). ALL RIGHTS RESERVED.</span>
