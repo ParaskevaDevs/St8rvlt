@@ -1,12 +1,18 @@
 'use client'
 
-import { useEffect, useRef } from 'react'
+import { useEffect, useLayoutEffect, useRef } from 'react'
 import Image from 'next/image'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { useCart } from './cart-context'
 
 gsap.registerPlugin(ScrollTrigger)
+
+// A layout effect (not a passive effect) so ctx.revert() below runs
+// synchronously during React's unmount commit, before React detaches the
+// section — otherwise ScrollTrigger's pin-spacer re-parenting is still in
+// place when React tries to removeChild it, throwing a NotFoundError.
+const useIsoLayoutEffect = typeof window !== 'undefined' ? useLayoutEffect : useEffect
 
 type Product = {
   id: string
@@ -29,7 +35,7 @@ export default function Drops() {
   const track = useRef<HTMLDivElement>(null)
   const { addItem } = useCart()
 
-  useEffect(() => {
+  useIsoLayoutEffect(() => {
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
     // The mobile address bar shows/hides constantly, firing height-only

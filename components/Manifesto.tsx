@@ -1,17 +1,23 @@
 'use client'
 
-import { useEffect, useRef } from 'react'
+import { useEffect, useLayoutEffect, useRef } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
 gsap.registerPlugin(ScrollTrigger)
+
+// A layout effect (not a passive effect) so ctx.revert() below runs
+// synchronously during React's unmount commit, before React detaches the
+// section — otherwise ScrollTrigger's pin-spacer re-parenting is still in
+// place when React tries to removeChild it, throwing a NotFoundError.
+const useIsoLayoutEffect = typeof window !== 'undefined' ? useLayoutEffect : useEffect
 
 const LINES = ['BORN IN NICOSIA.', 'WORN WORLDWIDE.', 'NEW ERA OF ★.']
 
 export default function Manifesto() {
   const root = useRef<HTMLElement>(null)
 
-  useEffect(() => {
+  useIsoLayoutEffect(() => {
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
     const ctx = gsap.context(() => {
