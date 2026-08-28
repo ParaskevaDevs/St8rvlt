@@ -49,7 +49,7 @@ const config: DropConfig = {
   // Replace with your real drop time.
   startTime: "2026-09-04T18:00:00+03:00",
   // Flip to `true` to go live immediately, ignoring the countdown.
-  forceLive: false,
+  forceLive: true,
   // The drop. Duplicate a block to add more — keep `id` unique. This list
   // feeds both the homepage carousel and the /drop grid.
   products: [
