@@ -22,7 +22,7 @@ export default function ProductArt({
       aria-hidden="true"
       className={`relative h-full w-full overflow-hidden ${className ?? ''}`}
       style={{
-        background: `radial-gradient(120% 140% at 85% 12%, ${accent}4D, transparent 60%), linear-gradient(160deg, #101010 0%, #050505 100%)`,
+        background: `radial-gradient(120% 140% at 85% 12%, ${accent}66, transparent 62%), linear-gradient(160deg, #131313 0%, #050505 100%)`,
       }}
     >
       <div
@@ -39,7 +39,7 @@ export default function ProductArt({
           fontSize: 'clamp(110px, 22vw, 200px)',
           lineHeight: 1,
           letterSpacing: '-0.04em',
-          opacity: 0.07,
+          opacity: 0.12,
         }}
       >
         {n}
@@ -51,7 +51,7 @@ export default function ProductArt({
       >
         <span
           className="whitespace-nowrap font-mono uppercase text-paper"
-          style={{ fontSize: '11px', letterSpacing: '0.5em', opacity: 0.08 }}
+          style={{ fontSize: '11px', letterSpacing: '0.5em', opacity: 0.12 }}
         >
           {`ST8R — ${name} — `.repeat(6)}
         </span>

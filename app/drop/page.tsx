@@ -149,7 +149,7 @@ function ProductCard({ product, index }: { product: DropProduct; index: number }
                     ? 'border-red bg-red text-black'
                     : 'border-paper/20 text-paper/70 hover:border-paper/50'
                 }`}
-                style={{ fontSize: '11px', letterSpacing: '0.08em', padding: '6px 12px' }}
+                style={{ fontSize: '11px', letterSpacing: '0.08em', padding: '11px 16px', minWidth: 44 }}
               >
                 {s}
               </button>
@@ -161,7 +161,7 @@ function ProductCard({ product, index }: { product: DropProduct; index: number }
           type="button"
           onClick={handleAdd}
           disabled={!size}
-          className="mt-4 w-full bg-red py-3 font-archivo text-black transition-opacity duration-300 hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-30"
+          className="mt-4 w-full bg-red py-3.5 font-archivo text-black transition-opacity duration-300 hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-30"
           style={{ fontSize: '12px', letterSpacing: '0.16em' }}
         >
           {added ? 'ADDED ✓' : oneSize ? 'ADD TO CART' : size ? `ADD — ${size}` : 'SELECT A SIZE'}

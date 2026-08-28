@@ -169,24 +169,34 @@ export default function DropGate() {
           },
           0.2,
         )
-        // Countdown units stagger up.
-        .fromTo(
-          '.dg-unit',
-          { autoAlpha: 0, y: 24 },
-          { autoAlpha: 1, y: 0, duration: 0.6, stagger: 0.07 },
-          0.7,
-        )
-        // Separators fade in right after, settling dim.
-        .fromTo('.dg-colon', { autoAlpha: 0 }, { autoAlpha: 0.4, duration: 0.4 }, '>-0.15')
-        // CTA / NOTIFY block fades + slides up last.
-        .fromTo('.dg-fade', { autoAlpha: 0, y: 18 }, { autoAlpha: 1, y: 0, duration: 0.6 }, '>-0.05')
-        // NOTIFY ME outline "draws in" left → right via clip.
-        .fromTo(
-          '.dg-notify',
-          { clipPath: 'inset(0 100% 0 0)' },
-          { clipPath: 'inset(0 0% 0 0)', duration: 0.5 },
-          '<',
-        )
+
+      // Live state has no countdown units/colons/notify form — only the
+      // wordmark + a single CTA. Building separate branches (instead of
+      // always targeting '.dg-unit' etc.) keeps GSAP from warning about
+      // tweening selectors that match nothing in this state.
+      if (live) {
+        tl.fromTo('.dg-fade', { autoAlpha: 0, y: 18 }, { autoAlpha: 1, y: 0, duration: 0.6 }, '>-0.2')
+      } else {
+        tl
+          // Countdown units stagger up.
+          .fromTo(
+            '.dg-unit',
+            { autoAlpha: 0, y: 24 },
+            { autoAlpha: 1, y: 0, duration: 0.6, stagger: 0.07 },
+            0.7,
+          )
+          // Separators fade in right after, settling dim.
+          .fromTo('.dg-colon', { autoAlpha: 0 }, { autoAlpha: 0.4, duration: 0.4 }, '>-0.15')
+          // CTA / NOTIFY block fades + slides up last.
+          .fromTo('.dg-fade', { autoAlpha: 0, y: 18 }, { autoAlpha: 1, y: 0, duration: 0.6 }, '>-0.05')
+          // NOTIFY ME outline "draws in" left → right via clip.
+          .fromTo(
+            '.dg-notify',
+            { clipPath: 'inset(0 100% 0 0)' },
+            { clipPath: 'inset(0 0% 0 0)', duration: 0.5 },
+            '<',
+          )
+      }
 
       // Barely-there red heartbeat on the wordmark, fades in then loops.
       gsap.fromTo(

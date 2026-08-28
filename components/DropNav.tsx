@@ -34,10 +34,14 @@ export default function DropNav() {
     >
       <nav
         className="container-1400 flex items-center justify-between"
-        style={{ padding: '16px clamp(20px, 4vw, 48px)' }}
+        style={{ padding: '4px clamp(14px, 4vw, 42px)' }}
         aria-label="Primary"
       >
-        <Link href="/" className="flex items-center" aria-label="ST8R home">
+        <Link
+          href="/"
+          className="inline-flex items-center py-3"
+          aria-label="ST8R home"
+        >
           <span
             className="font-archivo text-paper transition-colors duration-300 hover:text-red"
             style={{ fontSize: '15px', letterSpacing: '0.04em' }}
@@ -46,12 +50,12 @@ export default function DropNav() {
           </span>
         </Link>
 
-        <ul className="flex items-center" style={{ gap: 'clamp(18px, 3vw, 40px)' }}>
+        <ul className="flex items-center" style={{ gap: 'clamp(6px, 2vw, 28px)' }}>
           {LINKS.map((l) => (
             <li key={l.label}>
               <Link
                 href={l.href}
-                className="font-grotesk text-paper/80 transition-colors duration-300 hover:text-red"
+                className="inline-flex items-center px-2 py-3 font-grotesk text-paper/80 transition-colors duration-300 hover:text-red"
                 style={{ fontSize: '12px', letterSpacing: '0.18em' }}
               >
                 {l.label}
@@ -63,7 +67,7 @@ export default function DropNav() {
               type="button"
               onClick={openCart}
               aria-label={`Open cart, ${count} item${count === 1 ? '' : 's'}`}
-              className="group flex items-center gap-2 font-grotesk text-paper/80 transition-colors duration-300 hover:text-red"
+              className="group inline-flex items-center gap-2 py-3 pl-2 font-grotesk text-paper/80 transition-colors duration-300 hover:text-red"
               style={{ fontSize: '12px', letterSpacing: '0.18em' }}
             >
               <span>BAG</span>

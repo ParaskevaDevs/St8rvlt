@@ -32,7 +32,7 @@ export default function CartDrawer() {
         aria-modal="true"
         aria-label="Shopping cart"
         aria-hidden={!isOpen}
-        className={`fixed right-0 top-0 z-[9200] flex h-full w-[min(420px,90vw)] flex-col border-l border-white/10 bg-black transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+        className={`fixed right-0 top-0 z-[9200] flex h-full w-full flex-col border-l border-white/10 bg-black transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] sm:w-[420px] ${
           isOpen ? 'translate-x-0' : 'translate-x-full'
         }`}
       >

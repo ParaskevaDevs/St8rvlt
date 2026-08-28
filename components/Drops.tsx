@@ -97,12 +97,20 @@ export default function Drops() {
     >
       <div className="flex min-h-[100svh] flex-col justify-center py-8 md:min-h-screen">
         <div className="container-1400 px-6 md:px-12">
-          <p
-            className="mb-3 font-grotesk text-grey"
-            style={{ fontSize: '11px', letterSpacing: '0.28em' }}
-          >
-            01 — IN STOCK
-          </p>
+          <div className="flex items-baseline justify-between">
+            <p
+              className="mb-3 font-grotesk text-grey"
+              style={{ fontSize: '11px', letterSpacing: '0.28em' }}
+            >
+              01 — IN STOCK
+            </p>
+            <p
+              className="drops-heading mb-3 font-mono uppercase text-grey"
+              style={{ fontSize: '10px', letterSpacing: '0.2em' }}
+            >
+              SCROLL TO EXPLORE →
+            </p>
+          </div>
           <h2
             className="drops-heading mb-12 font-archivo text-red md:mb-16"
             style={{ fontSize: 'clamp(44px, 9vw, 120px)', lineHeight: 0.9, letterSpacing: '-0.02em' }}

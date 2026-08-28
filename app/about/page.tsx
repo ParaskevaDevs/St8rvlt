@@ -118,6 +118,7 @@ export default function AboutPage() {
               src="/logo.png"
               alt="ST8R — Nicosia train mark"
               fill
+              priority
               sizes="(max-width: 1024px) 100vw, 40vw"
               className="object-cover"
             />
