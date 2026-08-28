@@ -34,8 +34,9 @@ const dmMono = DM_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "STARVLT — ST8R",
-  description: "ST8R streetwear. Order yours.",
+  title: "ST8R — Limited Drops from Nicosia",
+  description:
+    "ST8R is a Cyprus streetwear label built on limited drops. No restocks, no noise — just timed releases from the vault.",
 };
 
 export default function RootLayout({

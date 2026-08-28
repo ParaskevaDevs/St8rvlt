@@ -5,6 +5,8 @@ import Image from 'next/image'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { useCart } from './cart-context'
+import config from '@/config/drop'
+import ProductArt from './ProductArt'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -14,21 +16,9 @@ gsap.registerPlugin(ScrollTrigger)
 // place when React tries to removeChild it, throwing a NotFoundError.
 const useIsoLayoutEffect = typeof window !== 'undefined' ? useLayoutEffect : useEffect
 
-type Product = {
-  id: string
-  name: string
-  price: number
-  image?: string
-  color?: string
-}
-
-const PRODUCTS: Product[] = [
-  { id: 'st8r-tee-blood', name: 'BLOOD STAR TEE', price: 25, image: '/product-1.jpg' },
-  { id: 'st8r-hood-noir', name: 'NOIR HOODIE', price: 25, color: '#161616' },
-  { id: 'st8r-cap-cy', name: 'CY CAP', price: 25, color: '#B30710' },
-  { id: 'st8r-tee-paper', name: 'PAPER TEE', price: 25, color: '#23211d' },
-  { id: 'st8r-tote-vault', name: 'VAULT TOTE', price: 25, color: '#2b0406' },
-]
+// Sourced from config/drop.ts — the same list that drives the /drop grid,
+// so the homepage teaser and the full drop never fall out of sync.
+const PRODUCTS = config.products
 
 export default function Drops() {
   const root = useRef<HTMLElement>(null)
@@ -125,27 +115,33 @@ export default function Drops() {
           ref={track}
           className="flex w-max flex-row gap-4 px-6 md:gap-8 md:px-12"
         >
-          {PRODUCTS.map((p) => (
+          {PRODUCTS.map((p, i) => (
             <article
               key={p.id}
               data-cursor="hover"
               className="group w-[80vw] shrink-0 md:w-[340px] lg:w-[380px]"
             >
               <div className="relative aspect-[4/5] w-full overflow-hidden border border-white/10 bg-[#0e0e0e] transition-colors duration-300 group-hover:border-red">
-                {p.image ? (
-                  <Image
-                    src={p.image}
-                    alt={`${p.name} — ST8R drop`}
-                    fill
-                    sizes="(max-width: 768px) 100vw, 380px"
-                    className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
-                  />
-                ) : (
-                  <div
-                    className="h-full w-full transition-transform duration-700 ease-out group-hover:scale-105"
-                    style={{ backgroundColor: p.color }}
-                    aria-hidden="true"
-                  />
+                <div className="h-full w-full transition-transform duration-700 ease-out group-hover:scale-105">
+                  {p.image ? (
+                    <Image
+                      src={p.image}
+                      alt={`${p.name} — ST8R drop`}
+                      fill
+                      sizes="(max-width: 768px) 100vw, 380px"
+                      className="object-cover"
+                    />
+                  ) : (
+                    <ProductArt index={i + 1} name={p.name} accent={p.accent} />
+                  )}
+                </div>
+                {p.stock <= 20 && (
+                  <span
+                    className="absolute left-3 top-3 border border-red/60 bg-black/60 px-2 py-1 font-mono uppercase text-red backdrop-blur-sm"
+                    style={{ fontSize: '9px', letterSpacing: '0.16em' }}
+                  >
+                    {p.stock} LEFT
+                  </span>
                 )}
                 <span
                   className="absolute right-3 top-3 font-archivo text-paper"
@@ -155,21 +151,29 @@ export default function Drops() {
                 </span>
               </div>
 
-              <div className="mt-4 flex items-center justify-between">
-                <h3
-                  className="font-grotesk text-paper"
-                  style={{ fontSize: '13px', letterSpacing: '0.1em' }}
+              <div className="mt-4">
+                <div className="flex items-center justify-between">
+                  <h3
+                    className="font-grotesk text-paper"
+                    style={{ fontSize: '13px', letterSpacing: '0.1em' }}
+                  >
+                    {p.name}
+                  </h3>
+                  <button
+                    type="button"
+                    onClick={() => addItem({ id: p.id, name: p.name, price: p.price })}
+                    className="border border-red px-4 py-2 font-grotesk text-red transition-colors duration-300 hover:bg-red hover:text-black"
+                    style={{ fontSize: '10px', letterSpacing: '0.16em' }}
+                  >
+                    ADD TO CART
+                  </button>
+                </div>
+                <p
+                  className="mt-1.5 font-grotesk text-grey"
+                  style={{ fontSize: '11px', letterSpacing: '0.03em' }}
                 >
-                  {p.name}
-                </h3>
-                <button
-                  type="button"
-                  onClick={() => addItem({ id: p.id, name: p.name, price: p.price })}
-                  className="border border-red px-4 py-2 font-grotesk text-red transition-colors duration-300 hover:bg-red hover:text-black"
-                  style={{ fontSize: '10px', letterSpacing: '0.16em' }}
-                >
-                  ADD TO CART
-                </button>
+                  {p.blurb}
+                </p>
               </div>
             </article>
           ))}

@@ -4,7 +4,7 @@ import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
-import config, { isDropLive } from '@/config/drop'
+import config, { isDropLive, formatStart } from '@/config/drop'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -16,21 +16,6 @@ const useIsoLayoutEffect = typeof window !== 'undefined' ? useLayoutEffect : use
 const prefersReduced = () =>
   typeof window !== 'undefined' &&
   window.matchMedia('(prefers-reduced-motion: reduce)').matches
-
-/** Format the configured ISO startTime as "27.06 · 18:00 CY" in Cyprus time. */
-function formatStart(iso: string): string {
-  const d = new Date(iso)
-  const parts = new Intl.DateTimeFormat('en-GB', {
-    timeZone: 'Asia/Nicosia',
-    day: '2-digit',
-    month: '2-digit',
-    hour: '2-digit',
-    minute: '2-digit',
-    hour12: false,
-  }).formatToParts(d)
-  const get = (t: string) => parts.find((p) => p.type === t)?.value ?? ''
-  return `${get('day')}.${get('month')} · ${get('hour')}:${get('minute')} CY`
-}
 
 type TimeLeft = { days: number; hours: number; minutes: number; seconds: number }
 
@@ -131,7 +116,7 @@ export default function DropGate() {
     // Nav lives outside this component and persists across routes, so its tween
     // is created OUTSIDE the gsap.context — that way unmounting the gate can't
     // revert the nav back to its hidden "from" state on other pages.
-    const navEl = document.querySelector('header[aria-label="Primary"]')
+    const navEl = document.querySelector('nav[aria-label="Primary"]')
     let navTween: gsap.core.Tween | undefined
     if (!reduceMotion && navEl) {
       navTween = gsap.fromTo(

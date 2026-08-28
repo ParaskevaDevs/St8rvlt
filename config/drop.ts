@@ -14,9 +14,11 @@ export type DropProduct = {
   id: string;        // unique slug, lowercase, no spaces. e.g. "tee-01"
   name: string;      // display name. e.g. "BORN IN NICOSIA TEE"
   price: number;     // price in EUR, number only (no "€"). e.g. 45
-  image: string;     // path under /public. e.g. "/products/tee-01.jpg"
-  sizes: string[];   // available sizes. e.g. ["S","M","L","XL"]
+  blurb: string;      // one-line description shown under the name. e.g. "Heavyweight cotton, cracked graphic."
+  accent: string;     // hex color used to tint the built-in placeholder art. e.g. "#B30710"
+  sizes: string[];   // available sizes. e.g. ["S","M","L","XL"] or ["ONE SIZE"]
   stock: number;     // demo scarcity count shown to create urgency. e.g. 25
+  image?: string;     // optional path under /public for a real photo. Leave unset to use the placeholder art.
 };
 
 /** The whole drop. */
@@ -44,28 +46,57 @@ export type DropConfig = {
 const config: DropConfig = {
   dropName: "DROP 001",
   location: "NICOSIA, CY",
-  // ~2 days out from launch. Replace with your real drop time.
-  startTime: "2026-06-27T18:00:00+03:00",
+  // Replace with your real drop time.
+  startTime: "2026-09-04T18:00:00+03:00",
   // Flip to `true` to go live immediately, ignoring the countdown.
   forceLive: false,
-  // Placeholder products so the /drop page has data in the next build.
-  // Duplicate a block to add more — keep `id` unique.
+  // The drop. Duplicate a block to add more — keep `id` unique. This list
+  // feeds both the homepage carousel and the /drop grid.
   products: [
     {
-      id: "tee-01",
-      name: "BORN IN NICOSIA TEE",
+      id: "tee-blood-star",
+      name: "BLOOD STAR TEE",
       price: 45,
-      image: "/products/tee-01.jpg",
+      blurb: "Heavyweight cotton, cracked star graphic across the chest.",
+      accent: "#B30710",
       sizes: ["S", "M", "L", "XL"],
       stock: 25,
     },
     {
-      id: "hood-01",
-      name: "VAULT HOODIE",
+      id: "hood-noir-vault",
+      name: "NOIR VAULT HOODIE",
       price: 95,
-      image: "/products/hood-01.jpg",
+      blurb: "Oversized fit, embroidered wordmark, fleece-lined hood.",
+      accent: "#3A3A3A",
       sizes: ["S", "M", "L", "XL"],
       stock: 15,
+    },
+    {
+      id: "cap-cy-06",
+      name: "CY 06 CAP",
+      price: 40,
+      blurb: "Low-profile six-panel, debossed leather patch.",
+      accent: "#FF2A2A",
+      sizes: ["ONE SIZE"],
+      stock: 30,
+    },
+    {
+      id: "tee-paper-run",
+      name: "PAPER RUN TEE",
+      price: 45,
+      blurb: "Washed paper-white tee, back print of the Nicosia metro line.",
+      accent: "#9A9A9A",
+      sizes: ["S", "M", "L", "XL"],
+      stock: 20,
+    },
+    {
+      id: "tote-vault-canvas",
+      name: "VAULT CANVAS TOTE",
+      price: 35,
+      blurb: "Raw canvas, star-branded, holds the whole drop.",
+      accent: "#2B0406",
+      sizes: ["ONE SIZE"],
+      stock: 40,
     },
   ],
 };
@@ -79,6 +110,21 @@ const config: DropConfig = {
 export function isDropLive(cfg: DropConfig = config): boolean {
   if (cfg.forceLive) return true;
   return Date.now() >= new Date(cfg.startTime).getTime();
+}
+
+/** Format an ISO startTime as "27.06 · 18:00 CY" in Cyprus time. */
+export function formatStart(iso: string): string {
+  const d = new Date(iso);
+  const parts = new Intl.DateTimeFormat("en-GB", {
+    timeZone: "Asia/Nicosia",
+    day: "2-digit",
+    month: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false,
+  }).formatToParts(d);
+  const get = (t: string) => parts.find((p) => p.type === t)?.value ?? "";
+  return `${get("day")}.${get("month")} · ${get("hour")}:${get("minute")} CY`;
 }
 
 export default config;
